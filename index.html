@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مدير المولدة - البوردات</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap');
+
+:root {
+  --bg: #07090f;
+  --s1: #0d1117;
+  --s2: #161d2b;
+  --s3: #1e2840;
+  --border: #263352;
+  --gold: #e8a020;
+  --gold2: #f5c842;
+  --green: #0fba6e;
+  --red: #e84040;
+  --blue: #2d7dea;
+  --orange: #f07030;
+  --txt: #e8edf5;
+  --muted: #7a8aaa;
+  --fz1: rgb(220,80,80);
+  --fz2: rgb(50,160,240);
+  --fz3: rgb(60,200,120);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── HEADER ─── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: var(--s1);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top:0; z-index:100;
+}
+
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-icon {
+  width:40px; height:40px;
+  background: linear-gradient(135deg,#e8a020,#c06010);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+}
+.brand-name { font-size:1.15rem; font-weight:900; color:var(--gold); }
+.brand-sub { font-size:.68rem; color:var(--muted); }
+
+.topbar-right { display:flex; gap:10px; align-items:center; }
+
+.month-pill {
+  display:flex; align-items:center; gap:6px;
+  background:var(--s2);
+  border:1px solid var(--border);
+  border-radius:8px; padding:7px 12px;
+  cursor:pointer;
+}
+.month-pill select {
+  background:transparent; border:none; color:var(--txt);
+  font-family:'Tajawal',sans-serif; font-size:.85rem; font-weight:700;
+  cursor:pointer; outline:none;
+}
+
+/* ─── GLOBAL STATS ─── */
+.gstats {
+  display:grid;
+  grid-template-columns: repeat(5,1fr);
+  gap:12px;
+  padding:16px 24px;
+  background:var(--s1);
+  border-bottom:1px solid var(--border);
+}
+
+.gstat {
+  background:var(--s2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px 14px;
+  text-align:center;
+}
+.gstat .gv { font-size:1.25rem; font-weight:900; color:var(--gold); }
+.gstat .gl { font-size:.68rem; color:var(--muted); margin-top:2px; }
+
+/* ─── MAIN ─── */
+.page { padding:20px 24px; }
+
+/* ─── BOARDS GRID ─── */
+.boards-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px,1fr));
+  gap:20px;
+}
+
+/* ─── BOARD CARD ─── */
+.board-card {
+  background: var(--s2);
+  border: 1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  transition: box-shadow .2s;
+}
+.board-card:hover { box-shadow:0 8px 32px rgba(0,0,0,.4); }
+
+.board-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px;
+  background:var(--s3);
+  border-bottom:1px solid var(--border);
+}
+
+.board-title {
+  display:flex; align-items:center; gap:8px;
+}
+.board-icon {
+  width:34px; height:34px;
+  border-radius:8px;
+  background: linear-gradient(135deg,#e8a020,#b06010);
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; font-weight:900; color:#000;
+}
+.board-name { font-size:1rem; font-weight:800; }
+.board-meta { font-size:.7rem; color:var(--muted); }
+
+.board-actions { display:flex; gap:6px; }
+
+.ib { /* icon button */
+  width:30px; height:30px;
+  border-radius:7px; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; transition:all .15s;
+}
+.ib-del { background:rgba(232,64,64,.12); color:var(--red); }
+.ib-del:hover { background:rgba(232,64,64,.28); }
+.ib-edit { background:rgba(45,125,234,.12); color:var(--blue); }
+.ib-edit:hover { background:rgba(45,125,234,.28); }
+
+/* ─── PHASES INSIDE BOARD ─── */
+.phases { padding:0; }
+
+.phase-block {
+  border-bottom:1px solid rgba(38,51,82,.6);
+}
+.phase-block:last-child { border-bottom:none; }
+
+.phase-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 14px 8px;
+  cursor:pointer;
+  user-select:none;
+}
+.phase-header:hover { background:rgba(255,255,255,.02); }
+
+.phase-label {
+  display:flex; align-items:center; gap:7px;
+  font-size:.85rem; font-weight:700;
+}
+.phase-dot {
+  width:10px; height:10px; border-radius:50%;
+}
+.fz1 { background:var(--fz1); }
+.fz2 { background:var(--fz2); }
+.fz3 { background:var(--fz3); }
+
+.phase-sum { font-size:.78rem; }
+.phase-sum .paid-sum { color:var(--green); font-weight:700; }
+.phase-sum .total-sum { color:var(--muted); }
+
+.phase-chevron { font-size:.7rem; color:var(--muted); transition:transform .2s; }
+.phase-chevron.open { transform:rotate(180deg); }
+
+.phase-body { padding:0 14px 10px; }
+
+/* ─── SUBSCRIBER ROWS ─── */
+.sub-row {
+  display:grid;
+  grid-template-columns: 1fr 70px 90px 70px;
+  gap:4px;
+  align-items:center;
+  padding:6px 8px;
+  border-radius:8px;
+  margin-bottom:4px;
+  background:rgba(255,255,255,.02);
+  border:1px solid transparent;
+  transition:all .15s;
+}
+.sub-row:hover { background:rgba(232,160,32,.05); border-color:rgba(232,160,32,.15); }
+
+.sub-name-col { font-size:.82rem; font-weight:600; }
+.sub-amp { font-size:.72rem; color:var(--muted); }
+
+.sub-amount { font-size:.82rem; font-weight:700; color:var(--gold); text-align:center; }
+
+.status-badge {
+  display:inline-block; padding:3px 8px;
+  border-radius:20px; font-size:.68rem; font-weight:700;
+  text-align:center;
+}
+.st-paid { background:rgba(15,186,110,.12); color:var(--green); border:1px solid rgba(15,186,110,.25); }
+.st-unpaid { background:rgba(232,64,64,.1); color:var(--red); border:1px solid rgba(232,64,64,.2); }
+
+.sub-actions { display:flex; gap:4px; justify-content:flex-end; }
+.sa { width:24px; height:24px; border-radius:5px; border:none; cursor:pointer; font-size:12px; display:flex; align-items:center; justify-content:center; transition:.15s; }
+.sa-pay { background:rgba(15,186,110,.12); color:var(--green); }
+.sa-pay:hover { background:rgba(15,186,110,.3); }
+.sa-edit { background:rgba(45,125,234,.12); color:var(--blue); }
+.sa-edit:hover { background:rgba(45,125,234,.3); }
+.sa-del { background:rgba(232,64,64,.1); color:var(--red); }
+.sa-del:hover { background:rgba(232,64,64,.25); }
+
+.add-sub-btn {
+  display:flex; align-items:center; gap:6px;
+  padding:7px 10px;
+  border-radius:8px; border:1px dashed var(--border);
+  background:transparent; color:var(--muted);
+  cursor:pointer; font-family:'Tajawal',sans-serif; font-size:.8rem;
+  width:100%; margin-top:4px;
+  transition:all .2s;
+}
+.add-sub-btn:hover { border-color:var(--gold); color:var(--gold); background:rgba(232,160,32,.05); }
+
+/* ─── ADD BOARD CARD ─── */
+.add-board-card {
+  background: var(--s2);
+  border: 2px dashed var(--border);
+  border-radius:16px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:10px;
+  min-height:180px;
+  cursor:pointer;
+  transition:all .2s;
+  color:var(--muted);
+  font-size:.9rem; font-weight:600;
+}
+.add-board-card:hover { border-color:var(--gold); color:var(--gold); background:rgba(232,160,32,.04); }
+.add-board-card .plus { font-size:2rem; }
+
+/* ─── MODAL ─── */
+.overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(6px);
+  z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .25s;
+}
+.overlay.show { opacity:1; pointer-events:all; }
+
+.modal {
+  background:var(--s1);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:26px;
+  width:100%; max-width:460px;
+  transform:translateY(20px); transition:transform .25s;
+  box-shadow:0 24px 64px rgba(0,0,0,.6);
+}
+.overlay.show .modal { transform:translateY(0); }
+
+.modal-title {
+  font-size:1.1rem; font-weight:900; color:var(--gold);
+  margin-bottom:18px; display:flex; align-items:center; gap:8px;
+}
+.back-btn {
+  width:32px; height:32px;
+  background:var(--s3); border:1px solid var(--border);
+  border-radius:8px; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:16px; flex-shrink:0;
+  margin-left:auto;
+}
+.back-btn:hover { border-color:var(--red); color:var(--red); }
+
+.fg { margin-bottom:14px; }
+.fg label { display:block; font-size:.78rem; color:var(--muted); margin-bottom:5px; font-weight:600; }
+.fg input, .fg select {
+  width:100%;
+  background:var(--s2); border:1px solid var(--border);
+  border-radius:9px; padding:10px 12px;
+  color:var(--txt); font-family:'Tajawal',sans-serif; font-size:.9rem;
+  outline:none; transition:border-color .2s;
+}
+.fg input:focus, .fg select:focus { border-color:var(--gold); }
+
+.frow { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+.mactions { display:flex; gap:10px; margin-top:18px; }
+.mactions .btn { flex:1; justify-content:center; padding:11px; border-radius:10px; }
+
+.btn {
+  padding:10px 18px; border-radius:10px; border:none;
+  cursor:pointer; font-family:'Tajawal',sans-serif; font-size:.9rem; font-weight:700;
+  display:flex; align-items:center; gap:6px; transition:all .2s;
+}
+.btn-gold { background:linear-gradient(135deg,var(--gold),#c06010); color:#000; }
+.btn-gold:hover { transform:scale(1.03); box-shadow:0 4px 16px rgba(232,160,32,.4); }
+.btn-ghost { background:var(--s2); color:var(--muted); border:1px solid var(--border); }
+.btn-ghost:hover { border-color:var(--red); color:var(--red); }
+.btn-sm { padding:7px 14px; font-size:.82rem; }
+
+/* ─── TARIFF SECTION ─── */
+.tariff-section {
+  background:var(--s2); border:1px solid var(--border);
+  border-radius:14px; padding:16px; margin-bottom:20px;
+}
+.tariff-title {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:12px;
+}
+.tariff-title h3 { font-size:.9rem; font-weight:800; color:var(--gold); }
+
+.tariff-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px;
+}
+.tariff-item {
+  background:var(--s3); border:1px solid var(--border);
+  border-radius:9px; padding:8px 12px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.tariff-amp { font-size:.78rem; font-weight:700; color:var(--gold2); }
+.tariff-price { font-size:.78rem; color:var(--green); font-weight:700; }
+
+/* ─── TOAST ─── */
+#toast {
+  position:fixed; bottom:20px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--s2); border:1px solid var(--border);
+  border-radius:11px; padding:11px 22px;
+  font-size:.88rem; font-weight:700; z-index:999;
+  transition:transform .3s; pointer-events:none; white-space:nowrap;
+}
+#toast.show { transform:translateX(-50%) translateY(0); }
+#toast.ok { border-color:var(--green); color:var(--green); }
+#toast.err { border-color:var(--red); color:var(--red); }
+
+/* ─── SECTION HEADER ─── */
+.sec-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:16px;
+}
+.sec-header h2 { font-size:1rem; font-weight:800; display:flex; align-items:center; gap:8px; }
+.badge-count { background:rgba(232,160,32,.15); color:var(--gold); border-radius:20px; padding:2px 10px; font-size:.72rem; font-weight:700; }
+
+/* ─── SUB TYPES ─── */
+.sub-types {
+  display:grid; grid-template-columns:repeat(2,1fr); gap:8px;
+}
+.sub-type-btn {
+  background:var(--s3); border:2px solid var(--border);
+  border-radius:10px; padding:10px 12px;
+  cursor:pointer; transition:all .15s;
+  display:flex; flex-direction:column; gap:2px;
+}
+.sub-type-btn:hover { border-color:var(--gold); background:rgba(232,160,32,.06); }
+.sub-type-btn.active { border-color:var(--gold); background:rgba(232,160,32,.1); }
+.stype-icon { font-size:1.1rem; }
+.stype-label { font-size:.82rem; font-weight:800; color:var(--txt); }
+.stype-desc { font-size:.68rem; color:var(--muted); }
+.sub-type-btn.active .stype-label { color:var(--gold); }
+
+
+  .gstats { grid-template-columns:repeat(2,1fr); }
+  .boards-grid { grid-template-columns:1fr; }
+  .page { padding:14px; }
+  .gstats { padding:12px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">⚡</div>
+    <div>
+      <div class="brand-name">مدير المولدة</div>
+      <div class="brand-sub">إدارة البوردات والمشتركين</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a id="openBrowserBtn" class="btn btn-gold btn-sm" download="مدير-المولدة.html" style="display:none;text-decoration:none">📥 تحميل التطبيق</a>
+    <div class="month-pill">
+      📅
+      <select id="monthSel" onchange="changeMonth()">
+        <option value="2026-01">يناير 2026</option>
+        <option value="2026-02">فبراير 2026</option>
+        <option value="2026-03">مارس 2026</option>
+        <option value="2026-04">أبريل 2026</option>
+        <option value="2026-05" selected>مايو 2026</option>
+        <option value="2026-06">يونيو 2026</option>
+        <option value="2026-07">يوليو 2026</option>
+        <option value="2026-08">أغسطس 2026</option>
+        <option value="2026-09">سبتمبر 2026</option>
+        <option value="2026-10">أكتوبر 2026</option>
+        <option value="2026-11">نوفمبر 2026</option>
+        <option value="2026-12">ديسمبر 2026</option>
+      </select>
+    </div>
+    <button class="btn btn-gold btn-sm" onclick="openTariffModal()">💰 التسعيرة</button>
+  </div>
+</div>
+
+<!-- GLOBAL STATS -->
+<div class="gstats">
+  <div class="gstat"><div class="gv" id="gs-boards">0</div><div class="gl">البوردات</div></div>
+  <div class="gstat"><div class="gv" id="gs-subs">0</div><div class="gl">المشتركون</div></div>
+  <div class="gstat" style="border-color:rgba(15,186,110,.3)"><div class="gv" style="color:var(--green)" id="gs-paid">0</div><div class="gl">دفعوا</div></div>
+  <div class="gstat" style="border-color:rgba(232,64,64,.3)"><div class="gv" style="color:var(--red)" id="gs-unpaid">0</div><div class="gl">لم يدفعوا</div></div>
+  <div class="gstat" style="border-color:rgba(232,160,32,.3)"><div class="gv" style="color:var(--gold)" id="gs-rev">0</div><div class="gl">المحصّل (د.ع)</div></div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+  <div class="sec-header">
+    <h2>⚡ البوردات <span class="badge-count" id="boardCount">0</span></h2>
+    <button class="btn btn-gold btn-sm" onclick="openAddBoard()">➕ إضافة بورد</button>
+  </div>
+  <div class="boards-grid" id="boardsGrid"></div>
+</div>
+
+<!-- ══ MODAL: ADD/EDIT BOARD ══ -->
+<div class="overlay" id="boardModal">
+  <div class="modal">
+    <div class="modal-title" id="boardModalTitle">⚡ إضافة بورد جديد <span class="back-btn" onclick="closeModal('boardModal')">✕</span></div>
+    <div class="fg">
+      <label>اسم البورد *</label>
+      <input type="text" id="bm-name" placeholder="مثال: بورد A - الحي الشمالي">
+    </div>
+    <div class="fg">
+      <label>ملاحظة</label>
+      <input type="text" id="bm-note" placeholder="اختياري">
+    </div>
+    <div class="mactions">
+      <button class="btn btn-ghost" onclick="closeModal('boardModal')">إلغاء</button>
+      <button class="btn btn-gold" onclick="saveBoard()">💾 حفظ البورد</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: ADD/EDIT SUBSCRIBER ══ -->
+<div class="overlay" id="subModal">
+  <div class="modal">
+    <div class="modal-title" id="subModalTitle">➕ إضافة مشترك <span class="back-btn" onclick="closeModal('subModal')">✕</span></div>
+    <div class="frow">
+      <div class="fg">
+        <label>اسم المشترك *</label>
+        <input type="text" id="sm-name" placeholder="الاسم الكامل">
+      </div>
+      <div class="fg">
+        <label>الهاتف</label>
+        <input type="tel" id="sm-phone" placeholder="07xx xxx xxxx">
+      </div>
+    </div>
+
+    <!-- نوع الاشتراك -->
+    <div class="fg">
+      <label>نوع الاشتراك *</label>
+      <div class="sub-types" id="subTypes">
+        <div class="sub-type-btn active" data-type="tariff" onclick="setSubType('tariff',this)">
+          <span class="stype-icon">⚡</span>
+          <span class="stype-label">سعر الأمبير</span>
+          <span class="stype-desc">حسب التسعيرة</span>
+        </div>
+        <div class="sub-type-btn" data-type="fixed" onclick="setSubType('fixed',this)">
+          <span class="stype-icon">🔒</span>
+          <span class="stype-label">مبلغ مقطوع</span>
+          <span class="stype-desc">بغض النظر عن الأمبير</span>
+        </div>
+        <div class="sub-type-btn" data-type="special" onclick="setSubType('special',this)">
+          <span class="stype-icon">⭐</span>
+          <span class="stype-label">سعر خاص</span>
+          <span class="stype-desc">أمبير محدد بسعر مخصص</span>
+        </div>
+        <div class="sub-type-btn" data-type="discount" onclick="setSubType('discount',this)">
+          <span class="stype-icon">🏷️</span>
+          <span class="stype-label">خصم أمبير</span>
+          <span class="stype-desc">يُخصم عدد أمبيرات من فاتورته</span>
+        </div>
+        <div class="sub-type-btn" data-type="free" onclick="setSubType('free',this)">
+          <span class="stype-icon">🎁</span>
+          <span class="stype-label">مجاني</span>
+          <span class="stype-desc">بدون رسوم</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- حقول ديناميكية -->
+    <div id="sm-fields-tariff" class="sm-fields">
+      <div class="fg">
+        <label>عدد الأمبير *</label>
+        <input type="number" id="sm-amp-tariff" placeholder="مثال: 10" min="1" oninput="previewTariffAmount()">
+      </div>
+      <div class="fg">
+        <label>المبلغ المحسوب (د.ع)</label>
+        <input type="number" id="sm-amount-tariff" placeholder="يُحسب تلقائياً" min="0" style="color:var(--gold)">
+      </div>
+    </div>
+
+    <div id="sm-fields-fixed" class="sm-fields" style="display:none">
+      <div class="fg">
+        <label>عدد الأمبير (اختياري)</label>
+        <input type="number" id="sm-amp-fixed" placeholder="للعلم فقط" min="1">
+      </div>
+      <div class="fg">
+        <label>المبلغ المقطوع (د.ع) *</label>
+        <input type="number" id="sm-amount-fixed" placeholder="مثال: 25000" min="0">
+      </div>
+    </div>
+
+    <div id="sm-fields-special" class="sm-fields" style="display:none">
+      <div class="frow">
+        <div class="fg">
+          <label>عدد الأمبير المخصص *</label>
+          <input type="number" id="sm-amp-special" placeholder="مثال: 8" min="1">
+        </div>
+        <div class="fg">
+          <label>السعر الخاص للأمبير (د.ع) *</label>
+          <input type="number" id="sm-rate-special" placeholder="مثال: 1500" min="0" oninput="previewSpecialAmount()">
+        </div>
+      </div>
+      <div class="fg">
+        <label>المبلغ المحسوب (د.ع)</label>
+        <input type="number" id="sm-amount-special" placeholder="يُحسب تلقائياً" min="0" style="color:var(--gold)">
+      </div>
+    </div>
+
+    <div id="sm-fields-discount" class="sm-fields" style="display:none">
+      <div class="frow">
+        <div class="fg">
+          <label>عدد الأمبير الكلي *</label>
+          <input type="number" id="sm-amp-discount" placeholder="مثال: 10" min="1" oninput="previewDiscountAmount()">
+        </div>
+        <div class="fg">
+          <label>الأمبيرات المخصومة *</label>
+          <input type="number" id="sm-disc-discount" placeholder="مثال: 3" min="0" oninput="previewDiscountAmount()">
+        </div>
+      </div>
+      <div class="fg">
+        <label>المبلغ بعد الخصم (د.ع)</label>
+        <input type="number" id="sm-amount-discount" placeholder="يُحسب تلقائياً" min="0" style="color:var(--gold)">
+      </div>
+      <div id="disc-preview" style="font-size:.75rem;color:var(--muted);margin-top:-6px;padding:0 4px;"></div>
+    </div>
+
+    <div id="sm-fields-free" class="sm-fields" style="display:none">
+      <div class="fg">
+        <label>عدد الأمبير (اختياري)</label>
+        <input type="number" id="sm-amp-free" placeholder="للعلم فقط" min="1">
+      </div>
+      <div style="background:rgba(15,186,110,.08);border:1px solid rgba(15,186,110,.2);border-radius:9px;padding:10px 14px;font-size:.82rem;color:var(--green);">
+        🎁 هذا المشترك مجاني — لن يُحتسب في الإيرادات
+      </div>
+    </div>
+
+    <div id="sm-fields-discount" class="sm-fields" style="display:none">
+      <div class="frow">
+        <div class="fg">
+          <label>عدد الأمبير الكلي *</label>
+          <input type="number" id="sm-amp-discount" placeholder="مثال: 10" min="1" oninput="previewDiscountAmount()">
+        </div>
+        <div class="fg">
+          <label>الأمبير المخصوم *</label>
+          <input type="number" id="sm-disc-discount" placeholder="مثال: 3" min="0" oninput="previewDiscountAmount()">
+        </div>
+      </div>
+      <div class="fg">
+        <label>المبلغ المحسوب (د.ع)</label>
+        <input type="number" id="sm-amount-discount" placeholder="يُحسب تلقائياً" min="0" style="color:var(--gold)">
+      </div>
+      <div id="discount-preview" style="font-size:.75rem;color:var(--muted);margin-top:-8px;padding:0 4px;"></div>
+    </div>
+
+    <div class="fg" style="margin-top:4px">
+      <label>حالة الدفع</label>
+      <select id="sm-status">
+        <option value="unpaid">لم يدفع</option>
+        <option value="paid">دفع ✅</option>
+      </select>
+    </div>
+
+    <div class="mactions">
+      <button class="btn btn-ghost" onclick="closeModal('subModal')">إلغاء</button>
+      <button class="btn btn-gold" onclick="saveSub()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: TARIFF ══ -->
+<div class="overlay" id="tariffModal">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-title">💰 تسعيرة الأمبير — <span id="tariffMonthLabel" style="font-size:.85rem;color:var(--muted)"></span> <span class="back-btn" onclick="closeModal('tariffModal')">✕</span></div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;">حدد سعر كل أمبير لهذا الشهر. سيتم حساب المبلغ تلقائياً عند إضافة مشترك.</p>
+    <div id="tariffFields"></div>
+    <div class="mactions">
+      <button class="btn btn-ghost" onclick="closeModal('tariffModal')">إغلاق</button>
+      <button class="btn btn-gold" onclick="saveTariff()">💾 حفظ التسعيرة</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL: PAY ══ -->
+<div class="overlay" id="payModal">
+  <div class="modal">
+    <div class="modal-title">💵 تسجيل دفعة <span class="back-btn" onclick="closeModal('payModal')">✕</span></div>
+    <p style="font-size:.83rem;color:var(--muted);margin-bottom:14px;">المشترك: <span id="pm-name" style="color:var(--txt);font-weight:800;"></span></p>
+    <div class="frow">
+      <div class="fg">
+        <label>المبلغ المدفوع (د.ع)</label>
+        <input type="number" id="pm-amount" min="0">
+      </div>
+      <div class="fg">
+        <label>تاريخ الدفع</label>
+        <input type="date" id="pm-date">
+      </div>
+    </div>
+    <div class="mactions">
+      <button class="btn btn-ghost" onclick="closeModal('payModal')">إلغاء</button>
+      <button class="btn btn-gold" onclick="confirmPay()">✅ تأكيد الدفع</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+const AMPS = [5,10,15,20,25,30];
+const PHASES = ['1','2','3'];
+const PHASE_LABELS = {'1':'الفيز 1','2':'الفيز 2','3':'الفيز 3'};
+
+localStorage.removeItem('gen_v2');
+let state = JSON.parse(localStorage.getItem('gen_v2') || 'null') || {
+  currentMonth: '2026-05',
+  boards: [],
+  // tariffs: { "2026-05": {5:5000, 10:10000, ...} }
+  tariffs: {}
+};
+
+// seed demo
+if (!state.boards.length) {
+  state.boards = [];
+  if(!state.tariffs['2026-05'])
+    state.tariffs['2026-05'] = {5:5000,10:10000,15:15000,20:20000,25:25000,30:30000};
+  persist();
+}
+
+function persist(){ localStorage.setItem('gen_v2', JSON.stringify(state)); }
+function uid(){ return 'x'+Math.random().toString(36).slice(2,9); }
+function getMonth(){ return state.currentMonth; }
+function getTariff(amp){
+  const t = state.tariffs[getMonth()] || {};
+  const perAmp = t['perAmp'] || 0;
+  return perAmp ? Math.round(amp * perAmp) : 0;
+}
+function fmt(n){ return n.toLocaleString('ar-IQ'); }
+
+// ═══════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════
+function render(){
+  const grid = document.getElementById('boardsGrid');
+  const m = getMonth();
+
+  // stats
+  let totalSubs=0, paidCount=0, unpaidCount=0, revenue=0;
+  state.boards.forEach(b=>{
+    PHASES.forEach(ph=>{
+      (b.phases[ph]||[]).forEach(s=>{
+        totalSubs++;
+        if(s.subType==='free'){ return; }
+        const pay = (s.payments||{})[m];
+        const amt = calcSubAmount(s, m);
+        if(pay?.paid){ paidCount++; revenue+=amt; }
+        else unpaidCount++;
+      });
+    });
+  });
+
+  document.getElementById('gs-boards').textContent = state.boards.length;
+  document.getElementById('gs-subs').textContent   = totalSubs;
+  document.getElementById('gs-paid').textContent   = paidCount;
+  document.getElementById('gs-unpaid').textContent = unpaidCount;
+  document.getElementById('gs-rev').textContent    = fmt(revenue);
+  document.getElementById('boardCount').textContent= state.boards.length;
+
+  // boards
+  grid.innerHTML = state.boards.map(b => renderBoard(b, m)).join('');
+
+  // add card
+  grid.innerHTML += `<div class="add-board-card" onclick="openAddBoard()">
+    <div class="plus">⚡</div>
+    <div>إضافة بورد جديد</div>
+  </div>`;
+}
+
+function renderBoard(b, m){
+  const phases = PHASES.map((ph,pi)=>{
+    const subs = b.phases[ph]||[];
+    const phasePaid = subs.filter(s=>(s.payments||{})[m]?.paid);
+    const phaseTotal = subs.reduce((a,s)=>{
+      return s.subType==='free' ? a : a+calcSubAmount(s,m);
+    },0);
+    const phasePaidAmt = subs.filter(s=>(s.payments||{})[m]?.paid).reduce((a,s)=>{
+      return a+calcSubAmount(s,m);
+    },0);
+
+    const subRows = subs.map(s=>{
+      const pay = (s.payments||{})[m];
+      const amt = calcSubAmount(s, m);
+      const paid = s.subType==='free' ? null : pay?.paid;
+      const ampStr = s.amp ? `${s.amp}A` : '';
+      return `<div class="sub-row">
+        <div class="sub-name-col">
+          ${s.name}
+          <div class="sub-amp">${ampStr ? ampStr+' · ' : ''}${subTypeLabel(s)}${s.phone?' · '+s.phone:''}</div>
+        </div>
+        <div class="sub-amount">${s.subType==='free' ? '<span style="color:var(--green)">مجاني</span>' : fmt(amt)}</div>
+        <div>${s.subType==='free'
+          ? '<span class="status-badge st-paid">🎁 مجاني</span>'
+          : `<span class="status-badge ${paid?'st-paid':'st-unpaid'}">${paid?'✅ مدفوع':'❌ غير مدفوع'}</span>`
+        }</div>
+        <div class="sub-actions">
+          ${s.subType!=='free'?`<button class="sa sa-pay" title="تسجيل دفعة" onclick="openPayModal('${b.id}','${ph}','${s.id}')">💵</button>`:''}
+          <button class="sa sa-edit" title="تعديل" onclick="openEditSub('${b.id}','${ph}','${s.id}')">✏️</button>
+          <button class="sa sa-del" title="حذف" onclick="delSub('${b.id}','${ph}','${s.id}')">🗑️</button>
+        </div>
+      </div>`;
+    }).join('');
+
+    const colors = ['fz1','fz2','fz3'];
+    return `<div class="phase-block" id="pb-${b.id}-${ph}">
+      <div class="phase-header" onclick="togglePhase('${b.id}','${ph}')">
+        <div class="phase-label">
+          <div class="phase-dot ${colors[pi]}"></div>
+          ${PHASE_LABELS[ph]}
+          <span style="font-size:.7rem;color:var(--muted)">(${subs.length} مشترك)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="phase-sum">
+            <span class="paid-sum">${fmt(phasePaidAmt)}</span>
+            <span class="total-sum"> / ${fmt(phaseTotal)} د.ع</span>
+          </div>
+          <span class="phase-chevron open" id="chv-${b.id}-${ph}">▼</span>
+        </div>
+      </div>
+      <div class="phase-body" id="phbody-${b.id}-${ph}">
+        ${subRows}
+        <button class="add-sub-btn" onclick="openAddSub('${b.id}','${ph}')">
+          ＋ إضافة مشترك في ${PHASE_LABELS[ph]}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div class="board-card">
+    <div class="board-header">
+      <div class="board-title">
+        <div class="board-icon">⚡</div>
+        <div>
+          <div class="board-name">${b.name}</div>
+          ${b.note?`<div class="board-meta">${b.note}</div>`:''}
+        </div>
+      </div>
+      <div class="board-actions">
+        <button class="ib ib-edit" onclick="openEditBoard('${b.id}')">✏️</button>
+        <button class="ib ib-del" onclick="delBoard('${b.id}')">🗑️</button>
+      </div>
+    </div>
+    <div class="phases">${phases}</div>
+  </div>`;
+}
+
+function togglePhase(bid,ph){
+  const body = document.getElementById(`phbody-${bid}-${ph}`);
+  const chv  = document.getElementById(`chv-${bid}-${ph}`);
+  if(body.style.display==='none'){ body.style.display=''; chv.classList.add('open'); }
+  else { body.style.display='none'; chv.classList.remove('open'); }
+}
+
+// ═══════════════════════════════════════════════════
+//  BOARD CRUD
+// ═══════════════════════════════════════════════════
+let _editBoardId = null;
+
+function openAddBoard(){
+  _editBoardId=null;
+  document.getElementById('boardModalTitle').textContent='⚡ إضافة بورد جديد';
+  document.getElementById('bm-name').value='';
+  document.getElementById('bm-note').value='';
+  openModal('boardModal');
+}
+
+function openEditBoard(id){
+  const b = state.boards.find(x=>x.id===id);
+  if(!b) return;
+  _editBoardId=id;
+  document.getElementById('boardModalTitle').textContent='✏️ تعديل البورد';
+  document.getElementById('bm-name').value=b.name;
+  document.getElementById('bm-note').value=b.note||'';
+  openModal('boardModal');
+}
+
+function saveBoard(){
+  const name = document.getElementById('bm-name').value.trim();
+  if(!name){ toast('أدخل اسم البورد','err'); return; }
+  if(_editBoardId){
+    const b=state.boards.find(x=>x.id===_editBoardId);
+    b.name=name; b.note=document.getElementById('bm-note').value.trim();
+    toast('تم تحديث البورد ✅','ok');
+  } else {
+    state.boards.push({
+      id:uid(), name, note:document.getElementById('bm-note').value.trim(),
+      phases:{'1':[],'2':[],'3':[]}
+    });
+    toast('تمت إضافة البورد ✅','ok');
+  }
+  persist(); closeModal('boardModal'); render();
+}
+
+function delBoard(id){
+  if(!confirm('حذف هذا البورد وجميع مشتركيه؟')) return;
+  state.boards = state.boards.filter(b=>b.id!==id);
+  persist(); render(); toast('تم الحذف','err');
+}
+
+// ═══════════════════════════════════════════════════
+//  SUBSCRIBER CRUD
+// ═══════════════════════════════════════════════════
+let _editSubId=null, _editSubBoard=null, _editSubPhase=null;
+
+function openAddSub(bid,ph){
+  _editSubId=null; _editSubBoard=bid; _editSubPhase=ph;
+  document.getElementById('subModalTitle').textContent=`➕ إضافة مشترك — ${PHASE_LABELS[ph]}`;
+  document.getElementById('sm-name').value='';
+  document.getElementById('sm-phone').value='';
+  document.getElementById('sm-status').value='unpaid';
+  // reset type
+  setSubType('tariff', document.querySelector('[data-type="tariff"]'));
+  ['tariff','fixed','special','free','discount'].forEach(t=>{
+    const ampEl = document.getElementById('sm-amp-'+t);
+    if(ampEl) ampEl.value='';
+    const amtEl = document.getElementById('sm-amount-'+t);
+    if(amtEl) amtEl.value='';
+  });
+  const rateEl = document.getElementById('sm-rate-special');
+  if(rateEl) rateEl.value='';
+  const discEl = document.getElementById('sm-disc-discount');
+  if(discEl) discEl.value='';
+  openModal('subModal');
+}
+
+function openEditSub(bid,ph,sid){
+  const b=state.boards.find(x=>x.id===bid);
+  const s=(b.phases[ph]||[]).find(x=>x.id===sid);
+  if(!s) return;
+  _editSubId=sid; _editSubBoard=bid; _editSubPhase=ph;
+  document.getElementById('subModalTitle').textContent='✏️ تعديل المشترك';
+  document.getElementById('sm-name').value=s.name;
+  document.getElementById('sm-phone').value=s.phone||'';
+
+  const type = s.subType||'tariff';
+  setSubType(type, document.querySelector(`[data-type="${type}"]`));
+
+  const m=getMonth();
+  const pay=(s.payments||{})[m];
+
+  if(type==='tariff'){
+    document.getElementById('sm-amp-tariff').value=s.amp||'';
+    document.getElementById('sm-amount-tariff').value=pay?.amount||getTariff(s.amp)||'';
+  } else if(type==='fixed'){
+    document.getElementById('sm-amp-fixed').value=s.amp||'';
+    document.getElementById('sm-amount-fixed').value=s.fixedAmount||pay?.amount||'';
+  } else if(type==='special'){
+    document.getElementById('sm-amp-special').value=s.amp||'';
+    document.getElementById('sm-rate-special').value=s.specialRate||'';
+    document.getElementById('sm-amount-special').value=pay?.amount||Math.round((s.amp||0)*(s.specialRate||0))||'';
+  } else if(type==='discount'){
+    document.getElementById('sm-amp-discount').value=s.amp||'';
+    document.getElementById('sm-disc-discount').value=s.discountAmp||'';
+    previewDiscountAmount();
+  } else if(type==='free'){
+    document.getElementById('sm-amp-free').value=s.amp||'';
+  }
+  document.getElementById('sm-status').value=pay?.paid?'paid':'unpaid';
+  openModal('subModal');
+}
+
+// ─── SUB TYPE SWITCHING ───
+let _subType = 'tariff';
+
+function setSubType(type, el){
+  _subType = type;
+  document.querySelectorAll('.sub-type-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.sm-fields').forEach(f=>f.style.display='none');
+  document.getElementById('sm-fields-'+type).style.display='';
+  document.getElementById('sm-status').closest('.fg').style.display = type==='free' ? 'none' : '';
+  if(type==='discount'){ document.getElementById('discount-preview').textContent=''; }
+}
+
+function previewDiscountAmount(){
+  const amp  = parseFloat(document.getElementById('sm-amp-discount').value)||0;
+  const disc = parseFloat(document.getElementById('sm-disc-discount').value)||0;
+  const net  = Math.max(0, amp - disc);
+  const perAmp = (state.tariffs[getMonth()]||{})['perAmp']||0;
+  const total  = getTariff(amp);
+  const after  = Math.round(net * perAmp);
+  document.getElementById('sm-amount-discount').value = after || '';
+  document.getElementById('discount-preview').textContent =
+    perAmp && amp
+      ? `${amp}A − ${disc}A = ${net}A  ×  ${fmt(perAmp)} = ${fmt(after)} د.ع  (كامل: ${fmt(total)} د.ع)`
+      : '';
+}
+function previewTariffAmount(){
+  const amp = parseFloat(document.getElementById('sm-amp-tariff').value)||0;
+  document.getElementById('sm-amount-tariff').value = amp ? getTariff(amp) : '';
+}
+
+function previewSpecialAmount(){
+  const amp  = parseFloat(document.getElementById('sm-amp-special').value)||0;
+  const rate = parseFloat(document.getElementById('sm-rate-special').value)||0;
+  document.getElementById('sm-amount-special').value = (amp && rate) ? Math.round(amp*rate) : '';
+}
+
+// calc display amount for a subscriber in a given month
+function calcSubAmount(s, m){
+  if(s.subType==='free') return 0;
+  const pay = (s.payments||{})[m];
+  if(pay?.amount) return pay.amount;
+  if(s.subType==='fixed') return s.fixedAmount||0;
+  if(s.subType==='special') return Math.round((s.amp||0)*(s.specialRate||0));
+  if(s.subType==='discount'){
+    const net = Math.max(0,(s.amp||0)-(s.discountAmp||0));
+    const perAmp = (state.tariffs[m]||{})['perAmp']||0;
+    return Math.round(net*perAmp);
+  }
+  if(s.subType==='tariff') return getTariff(s.amp||0);
+  return 0;
+}
+
+function subTypeLabel(s){
+  if(s.subType==='free')     return '🎁 مجاني';
+  if(s.subType==='fixed')    return '🔒 مقطوع';
+  if(s.subType==='special')  return '⭐ خاص';
+  if(s.subType==='discount') return `🏷️ خصم ${s.discountAmp||0}A`;
+  return '⚡ تسعيرة';
+}
+
+function saveSub(){
+  const name=document.getElementById('sm-name').value.trim();
+  if(!name){ toast('أدخل الاسم','err'); return; }
+  const b=state.boards.find(x=>x.id===_editSubBoard);
+  if(!b) return;
+  const ph=_editSubPhase;
+  const m=getMonth();
+  const type=_subType;
+  const paid = type==='free' ? false : document.getElementById('sm-status').value==='paid';
+
+  let amp=0, amount=0, fixedAmount=0, specialRate=0, discountAmp=0;
+
+  if(type==='tariff'){
+    amp=parseFloat(document.getElementById('sm-amp-tariff').value)||0;
+    if(!amp){ toast('أدخل عدد الأمبير','err'); return; }
+    amount=parseFloat(document.getElementById('sm-amount-tariff').value)||getTariff(amp);
+  } else if(type==='fixed'){
+    amp=parseFloat(document.getElementById('sm-amp-fixed').value)||0;
+    fixedAmount=parseFloat(document.getElementById('sm-amount-fixed').value)||0;
+    if(!fixedAmount){ toast('أدخل المبلغ المقطوع','err'); return; }
+    amount=fixedAmount;
+  } else if(type==='special'){
+    amp=parseFloat(document.getElementById('sm-amp-special').value)||0;
+    specialRate=parseFloat(document.getElementById('sm-rate-special').value)||0;
+    if(!amp||!specialRate){ toast('أدخل الأمبير والسعر الخاص','err'); return; }
+    amount=Math.round(amp*specialRate);
+  } else if(type==='discount'){
+    amp=parseFloat(document.getElementById('sm-amp-discount').value)||0;
+    discountAmp=parseFloat(document.getElementById('sm-disc-discount').value)||0;
+    if(!amp){ toast('أدخل عدد الأمبير','err'); return; }
+    const net=Math.max(0,amp-discountAmp);
+    const perAmp=(state.tariffs[getMonth()]||{})['perAmp']||0;
+    amount=parseFloat(document.getElementById('sm-amount-discount').value)||Math.round(net*perAmp);
+  } else if(type==='free'){
+    amp=parseFloat(document.getElementById('sm-amp-free').value)||0;
+    amount=0;
+  }
+
+  const subData = {
+    name, phone:document.getElementById('sm-phone').value.trim(),
+    subType:type, amp, fixedAmount, specialRate, discountAmp
+  };
+
+  if(_editSubId){
+    const s=(b.phases[ph]||[]).find(x=>x.id===_editSubId);
+    Object.assign(s, subData);
+    if(!s.payments) s.payments={};
+    if(type!=='free') s.payments[m]={paid, amount, date:s.payments[m]?.date||''};
+    toast('تم التحديث ✅','ok');
+  } else {
+    const ns={id:uid(), ...subData, payments:{}};
+    if(paid && type!=='free') ns.payments[m]={paid:true, amount, date:''};
+    if(!b.phases[ph]) b.phases[ph]=[];
+    b.phases[ph].push(ns);
+    toast('تمت الإضافة ✅','ok');
+  }
+  persist(); closeModal('subModal'); render();
+}
+
+function delSub(bid,ph,sid){
+  if(!confirm('حذف هذا المشترك؟')) return;
+  const b=state.boards.find(x=>x.id===bid);
+  b.phases[ph]=b.phases[ph].filter(s=>s.id!==sid);
+  persist(); render(); toast('تم الحذف','err');
+}
+
+// ═══════════════════════════════════════════════════
+//  PAY
+// ═══════════════════════════════════════════════════
+let _payB, _payPh, _payS;
+
+function openPayModal(bid,ph,sid){
+  const b=state.boards.find(x=>x.id===bid);
+  const s=(b.phases[ph]||[]).find(x=>x.id===sid);
+  if(!s) return;
+  _payB=bid; _payPh=ph; _payS=sid;
+  document.getElementById('pm-name').textContent=s.name;
+  const m=getMonth();
+  document.getElementById('pm-amount').value=(s.payments||{})[m]?.amount||calcSubAmount(s,m)||'';
+  document.getElementById('pm-date').value=new Date().toISOString().split('T')[0];
+  openModal('payModal');
+}
+
+function confirmPay(){
+  const b=state.boards.find(x=>x.id===_payB);
+  const s=(b.phases[_payPh]||[]).find(x=>x.id===_payS);
+  if(!s) return;
+  const amount=parseInt(document.getElementById('pm-amount').value)||0;
+  const date=document.getElementById('pm-date').value;
+  const m=getMonth();
+  if(!s.payments) s.payments={};
+  s.payments[m]={paid:true, amount, date};
+  persist(); closeModal('payModal'); render();
+  toast('تم تسجيل الدفعة ✅','ok');
+}
+
+// ═══════════════════════════════════════════════════
+//  TARIFF
+// ═══════════════════════════════════════════════════
+function openTariffModal(){
+  const m=getMonth();
+  document.getElementById('tariffMonthLabel').textContent=
+    document.getElementById('monthSel').options[document.getElementById('monthSel').selectedIndex].text;
+  const t=state.tariffs[m]||{};
+  document.getElementById('tariffFields').innerHTML = `
+    <div class="fg">
+      <label>سعر الأمبير الواحد (د.ع)</label>
+      <input type="number" id="tf-perAmp" value="${t['perAmp']||''}" placeholder="مثال: 2000" min="0">
+    </div>
+    <div style="background:var(--s3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:4px;">
+      <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px;font-weight:700;">معاينة التسعيرة</div>
+      <div id="tariffPreview" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;font-size:.78rem;"></div>
+    </div>
+  `;
+  document.getElementById('tf-perAmp').addEventListener('input', updateTariffPreview);
+  updateTariffPreview();
+  openModal('tariffModal');
+}
+
+function updateTariffPreview(){
+  const perAmp = parseFloat(document.getElementById('tf-perAmp').value)||0;
+  const samples = [5,10,15,20,25,30];
+  document.getElementById('tariffPreview').innerHTML = samples.map(a=>`
+    <div style="background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="color:var(--muted)">${a}A</span>
+      <span style="color:var(--gold);font-weight:700;">${perAmp?(a*perAmp).toLocaleString('ar-IQ'):'—'}</span>
+    </div>
+  `).join('');
+}
+
+function saveTariff(){
+  const m=getMonth();
+  const perAmp=parseFloat(document.getElementById('tf-perAmp').value)||0;
+  if(!state.tariffs[m]) state.tariffs[m]={};
+  state.tariffs[m]['perAmp']=perAmp;
+  persist(); closeModal('tariffModal'); render();
+  toast('تم حفظ التسعيرة ✅','ok');
+}
+
+// ═══════════════════════════════════════════════════
+//  MONTH
+// ═══════════════════════════════════════════════════
+function changeMonth(){
+  state.currentMonth=document.getElementById('monthSel').value;
+  persist(); render();
+}
+
+// ═══════════════════════════════════════════════════
+//  MODAL HELPERS
+// ═══════════════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+['boardModal','subModal','tariffModal','payModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{
+    if(e.target===e.currentTarget) closeModal(id);
+  });
+});
+
+// ═══════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='show '+type;
+  setTimeout(()=>t.className='',3000);
+}
+
+// ═══════════════════════════════════════════════════
+//  OPEN IN BROWSER DETECTION
+// ═══════════════════════════════════════════════════
+(function detectContext(){
+  const inIframe  = window.self !== window.top;
+  const ua        = navigator.userAgent || '';
+  const inWebView = ua.includes('wv') || ua.includes('WebView');
+  const btn       = document.getElementById('openBrowserBtn');
+
+  if(inIframe || inWebView){
+    // بناء blob URL للتحميل المباشر
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob([html], {type:'text/html'});
+    btn.href   = URL.createObjectURL(blob);
+    btn.style.display = 'flex';
+  } else {
+    btn.style.display = 'none';
+  }
+})();
+document.getElementById('monthSel').value=state.currentMonth;
+render();
+</script>
+</body>
+</html>
